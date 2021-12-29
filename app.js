@@ -2,27 +2,67 @@
   'use strict';
 
   angular
-    .module('LunchChecker', [])
+    .module('ShoppingListApp', [])
+    .controller('ToBuyCtrl', ToBuyCtrl)
+    .controller('BoughtCtrl', BoughtCtrl)
+    .service('ShoppingListService', ShoppingListService);
 
-    .controller('LunchCt', function ($scope) {
-      $scope.items = '';
-      $scope.totalValue = 0;
-      $scope.display;
-      $scope.message = '';
+  ToBuyCtrl.$inject = ['ShoppingListService'];
+  function ToBuyCtrl(ShoppingListService) {
+    var showList = this;
 
-      $scope.howMany = function () {
-        var input = $scope.items;
-        $scope.display = input.split(',').length;
-        console.log('Here is input thing', $scope.items.length);
-        console.log(input.split(','));
+    showList.show = ShoppingListService.getItems();
 
-        if ($scope.items.length === 0) {
-          $scope.message = 'Please add something';
-        } else if ($scope.display >= 1 && $scope.display <= 3) {
-          $scope.message = 'Enjoy!';
-        } else if ($scope.display >= 4) {
-          $scope.message = "That's too much";
-        }
+    showList.alreadyBought = function (itemIndex, itemName, quantity) {
+      ShoppingListService.alreadyBought(itemIndex, itemName, quantity);
+    };
+  }
+
+  BoughtCtrl.$inject = ['ShoppingListService'];
+  function BoughtCtrl(ShoppingListService) {
+    var bought = this;
+
+    bought.show = ShoppingListService.getBought();
+    bought.message = 'check';
+
+    // bought.removeItem = function (itemIndex) {
+    //   ShoppingListService.removeItem(itemIndex);
+    // };
+  }
+
+  function ShoppingListService() {
+    var service = this;
+
+    // List of shopping items
+    var items = [
+      { name: 'cookies', qty: 10 },
+      { name: 'milk', qty: 5 },
+      { name: 'bananas', qty: 4 },
+      { name: 'orange', qty: 3 },
+      { name: 'apple', qty: 2 },
+    ];
+
+    var boughtItems = [];
+
+    service.alreadyBought = function (itemIndex, itemName, quantity) {
+      var item = {
+        name: itemName,
+        qty: quantity,
       };
-    });
+      boughtItems.push(item);
+
+      items.splice(itemIndex, 1);
+
+      if (boughtItems.length === 5) {
+        bought.message = 'nothing here';
+      }
+    };
+
+    service.getItems = function () {
+      return items;
+    };
+    service.getBought = function () {
+      return boughtItems;
+    };
+  }
 })();

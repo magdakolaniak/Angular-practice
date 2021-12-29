@@ -1,33 +1,56 @@
 <!doctype html>
-<html lang="en">
+<html ng-app = 'ShoppingListApp' lang="en">
   <head>
-    <title>Lunch Checker</title>
+    <title>Shopping List Check Off</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="angular.min.js"></script>
-    <script src="app.js"></script>
-    
+    <script src='angular.min.js'></script>
+    <script src= "app.js"></script>
     <link rel="stylesheet" href="styles/bootstrap.min.css">
     <style>
-      .message { font-size: 1.3em; font-weight: bold; }
+      .emptyMessage {
+        font-weight: bold;
+        color: red;
+        font-size: 1.2em;
+      }
+      li {
+        margin-bottom: 7px;
+        font-size: 1.2em;
+      }
+      li > button {
+        margin-left: 6px;
+      }
+      button > span {
+        color: green;
+      }
     </style>
   </head>
-<body ng-app="LunchChecker">
-   <div ng-controller="LunchCt" class="container">
-     <h1>Lunch Checker</h1>
+<body>
+  <div class="container">
+  <h1>Shopping List Check Off</h1>
 
-         <div class="form-group">
-             <input ng-model ="items"id="lunch-menu" type="text"
-             placeholder="list comma separated dishes you usually have for lunch"
-             class="form-control">
-         </div>
-         <div class="form-group">
-             <button ng-click="howMany()" class="btn btn-default">Check If Too Much</button>
-         </div>
-         <div class="form-group message">
-           {{message}}
-           <!-- Your message can go here. -->
-         </div>
-   </div>
+  <div class="row">
+
+    <!-- To Buy List -->
+    <div ng-controller = 'ToBuyCtrl as showList' class="col-md-6">
+     <h2>To Buy:</h2>
+     <ol>
+       <li ng-repeat = "item in showList.show">Buy {{item.qty}}  {{item.name}} <button ng-click = 'showList.alreadyBought($index, item.name, item.qty);'class="btn btn-default"><span class="glyphicon glyphicon-ok"></span> Bought</button></li>
+       
+    </ol>
+    <div>{{}}</div>
+     
+    </div>
+
+    <!-- Already Bought List -->
+    <div ng-controller = 'BoughtCtrl as bought' class="col-md-6">
+     <h2>Already Bought:</h2>
+     <ol>
+       <li ng-repeat = 'item in bought.show'>Bought {{ item.qty}}  {{item.name}}</li>
+     </ol>
+    
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
