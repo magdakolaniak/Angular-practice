@@ -5,7 +5,7 @@
     .module('ShoppingListApp', [])
     .controller('ToBuyCtrl', ToBuyCtrl)
     .controller('BoughtCtrl', BoughtCtrl)
-    .controller('Message')
+
     .service('ShoppingListService', ShoppingListService);
 
   ToBuyCtrl.$inject = ['ShoppingListService'];
